@@ -1,6 +1,6 @@
 [gd_scene load_steps=21 format=3 uid="uid://cslfff7vma661"]
 
-[ext_resource type="Script" path="res://Scripts/bomb.gd" id="1_20rud"]
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_1xql3"]
 [ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="1_myo7e"]
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="3_j26w8"]
 [ext_resource type="Texture2D" uid="uid://506ls5s8upyp" path="res://Assets/bomberman.png" id="4_2j6ji"]
@@ -488,7 +488,7 @@ animations = [{
 size = Vector2(16, 16)
 
 [node name="Node2D" type="Node2D"]
-script = ExtResource("1_20rud")
+script = ExtResource("1_1xql3")
 
 [node name="TileMap" type="TileMap" parent="."]
 tile_set = SubResource("TileSet_ajheo")

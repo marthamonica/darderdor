@@ -16,7 +16,7 @@ var bomb_radius : int = 1
 var bomb_count : int = 1
 var player_speed : float = 1
 var player_speed_modifier : float = 0.5
-
+var bomb_placed_count : int = 0
 
 var is_destructible_custom_data = "is_destructible"
 
@@ -51,9 +51,11 @@ func _input(event):
 					player_speed += 0.5
 					tile_map.set_cell(power_up_layer, tile_coord, -1)
 				_:
-					#if there is no power up place bomb
-					tile_map.set_cell(ground_layer, tile_coord, tile_source_id, BOMB_ATLAS_COORD)
-					trigger_bomb_timer(tile_coord, bomb_timer, bomb_radius)
+					#if there is no power up place bomb and we have more bomb to place
+					if (bomb_placed_count < bomb_count): 
+						bomb_placed_count += 1
+						tile_map.set_cell(ground_layer, tile_coord, tile_source_id, BOMB_ATLAS_COORD)
+						trigger_bomb_timer(tile_coord, bomb_timer, bomb_radius)
 
 
 func trigger_bomb_timer(tile_coord, time, radius):
@@ -61,6 +63,7 @@ func trigger_bomb_timer(tile_coord, time, radius):
 	
 	#after timeout, we delete the bomb
 	tile_map.set_cell(ground_layer, tile_coord, -1)
+	bomb_placed_count -= 1
 	
 	#remove all destructible tile within radius
 	var tile_coord_x : int = tile_coord.x
@@ -69,6 +72,7 @@ func trigger_bomb_timer(tile_coord, time, radius):
 		for y in range(tile_coord_y - radius, tile_coord_y + radius + 1):
 			var curr_coord : Vector2i = Vector2i(x, y)
 			
+			#remove all destructible on ground layer
 			var tile_data : TileData = tile_map.get_cell_tile_data(ground_layer, curr_coord)
 			
 			if tile_data:
@@ -76,6 +80,10 @@ func trigger_bomb_timer(tile_coord, time, radius):
 				
 				if is_destructible:
 					tile_map.set_cell(ground_layer, curr_coord, -1)
+					
+			#remove all power up within radius
+			else:
+				tile_map.set_cell(power_up_layer, curr_coord, -1)
 			
 	
 	
