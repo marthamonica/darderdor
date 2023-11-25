@@ -1,40 +1,25 @@
-extends Area2D
+extends CharacterBody2D
 
-@export var speed = 100
-var screen_size
+@export var speed: int = 100
+@onready var animation: AnimationPlayer = $AnimationPlayer
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	screen_size = get_viewport_rect().size
+func handleInput():
+	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	velocity = direction * speed
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	var velocity = Vector2.ZERO
-	if Input.is_action_pressed("move_right"):
-		$AnimatedSprite2D.animation = "side"
-		$AnimatedSprite2D.flip_h = false
-		velocity.x += 1
-	if Input.is_action_pressed("move_left"):
-		$AnimatedSprite2D.animation = "side"
-		$AnimatedSprite2D.flip_h = true
-		velocity.x -= 1
-	if Input.is_action_pressed("move_down"):
-		$AnimatedSprite2D.animation = "down"
-		$AnimatedSprite2D.flip_h = false
-		velocity.y += 1
-	if Input.is_action_pressed("move_up"):
-		$AnimatedSprite2D.animation = "up"
-		$AnimatedSprite2D.flip_h = false
-		velocity.y -= 1
-		
-	if velocity.length() > 0:
-		velocity = velocity.normalized() * speed
-		$AnimatedSprite2D.play()
+func updateAnimation():
+	if velocity.length() == 0 && animation.is_playing():
+		animation.stop()
 	else:
-		$AnimatedSprite2D.stop()
+		var direction = "Down"
+		if velocity.x < 0: direction = "Left"
+		elif velocity.x > 0: direction = "Right"
+		elif velocity.y < 0: direction = "Up"
 		
-	position += velocity * delta
-	position = position.clamp(Vector2.ZERO, screen_size)
+		animation.play("walk" + direction)
 	
-		
+func _physics_process(delta):
+	handleInput()
+	move_and_slide()
+	updateAnimation()
+	

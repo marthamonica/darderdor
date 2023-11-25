@@ -7,6 +7,8 @@ const BOMB_ATLAS_COORD : Vector2i = Vector2i (6,5)
 const BOMB_COUNT_INC_POWER_UP_ATLAS_COORD : Vector2i = Vector2i (7,8)
 const BOMB_RADIUS_INC_POWER_UP_ATLAS_COORD : Vector2i = Vector2i (8,9)
 const PLAYER_SPEED_INC_POWER_UP_ATLAS_COORD : Vector2i = Vector2i (20,8)
+const BRICK_ATLAS_COORD  = Vector2i(25, 8)
+const WALL_ATLAS_COORD  = Vector2i(11, 3)
 
 var ground_layer : int = 0
 var power_up_layer : int = 1
@@ -20,9 +22,18 @@ var bomb_placed_count : int = 0
 
 var is_destructible_custom_data = "is_destructible"
 
+func hydrateMap():
+	for y in range(tile_map.get_used_rect().size.y):
+		for x in range(tile_map.get_used_rect().size.x):
+			var atlas_coord = tile_map.get_cell_atlas_coords(ground_layer, Vector2(x, y))
+			if (atlas_coord == WALL_ATLAS_COORD):
+				var wall = RigidBody2D.new()
+				wall.position = Vector2(x, y) * tile_map.cell_quadrant_size
+				add_child(wall)
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	pass
+	hydrateMap()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

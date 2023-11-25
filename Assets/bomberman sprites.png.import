@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://506ls5s8upyp"
-path="res://.godot/imported/bomberman.png-92f612f87bad4904688809b8962b2b62.ctex"
+uid="uid://bwjhop3y0gjv4"
+path="res://.godot/imported/bomberman sprites.png-ab1a30f288f8cb20a2c49f018afe50a1.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/bomberman.png"
-dest_files=["res://.godot/imported/bomberman.png-92f612f87bad4904688809b8962b2b62.ctex"]
+source_file="res://Assets/bomberman sprites.png"
+dest_files=["res://.godot/imported/bomberman sprites.png-ab1a30f288f8cb20a2c49f018afe50a1.ctex"]
 
 [params]
 
