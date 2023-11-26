@@ -13,12 +13,20 @@ const WALL_ATLAS_COORD  = Vector2i(11, 3)
 var ground_layer : int = 0
 var power_up_layer : int = 1
 var tile_source_id : int = 0
+
+#power up
 var bomb_timer : float = 1.5
 var bomb_radius : int = 1
 var bomb_count : int = 1
 var player_speed : float = 1
 var player_speed_modifier : float = 0.5
 var bomb_placed_count : int = 0
+
+#player inventory
+var life_count : int = 3
+
+#spawn point
+const spawn_pos = [Vector2i(1,1), Vector2i(1,11), Vector2i(17,1), Vector2i(17,11)]
 
 var is_destructible_custom_data = "is_destructible"
 
@@ -33,11 +41,12 @@ func hydrateMap():
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	randomize()
 	hydrateMap()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	get_node("Label").text = "Bomb count = " + str(bomb_count) + "\n" + "Bomb radius = " + str(bomb_radius) + "\n" + "Player speed = " + str(player_speed) 
+	get_node("Label").text = "Life = " + str(life_count) + "\n" + "Bomb count = " + str(bomb_count) + "\n" + "Bomb radius = " + str(bomb_radius) + "\n" + "Player speed = " + str(player_speed)
 
 func _input(event):
 	if Input.is_action_just_pressed("click"):
@@ -80,22 +89,43 @@ func trigger_bomb_timer(tile_coord, time, radius):
 	var tile_coord_x : int = tile_coord.x
 	var tile_coord_y : int = tile_coord.y
 	for x in range(tile_coord_x - radius, tile_coord_x + radius + 1):
-		for y in range(tile_coord_y - radius, tile_coord_y + radius + 1):
-			var curr_coord : Vector2i = Vector2i(x, y)
-			
-			#remove all destructible on ground layer
-			var tile_data : TileData = tile_map.get_cell_tile_data(ground_layer, curr_coord)
-			
-			if tile_data:
-				var is_destructible = tile_data.get_custom_data(is_destructible_custom_data)
-				
-				if is_destructible:
-					tile_map.set_cell(ground_layer, curr_coord, -1)
-					
-			#remove all power up within radius
-			else:
-				tile_map.set_cell(power_up_layer, curr_coord, -1)
+		var curr_coord : Vector2i = Vector2i(x, tile_coord_y)
+		remove_destructable(curr_coord)
+		check_player_in_coord(curr_coord)
+		
+	for y in range(tile_coord_y - radius, tile_coord_y + radius + 1):
+		var curr_coord : Vector2i = Vector2i(tile_coord_x, y)
+		remove_destructable(Vector2i(tile_coord_x, y))
+		check_player_in_coord(curr_coord)
 			
 	
+func remove_destructable(tile_coord):
+	#remove all destructible on ground layer
+	var tile_data : TileData = tile_map.get_cell_tile_data(ground_layer, tile_coord)
 	
+	if tile_data:
+		var is_destructible = tile_data.get_custom_data(is_destructible_custom_data)
+		
+		if is_destructible:
+			tile_map.set_cell(ground_layer, tile_coord, -1)
+			
+	#remove all power up within radius
+	else:
+		tile_map.set_cell(power_up_layer, tile_coord, -1)
+		
+func get_player_coord():
+	return tile_map.local_to_map($Player.get_position())
+
+func check_player_in_coord(tile_coord):
+	if (get_player_coord() == tile_coord):
+		life_count -= 1
+		
+		#pick a new starting pos
+		var new_pos : Vector2i = spawn_pos[randi() % spawn_pos.size()]
+		$Player.set_position(tile_map.map_to_local(new_pos))
+		
+		#TODO : reset player power up
+		
+		if (life_count == 0):
+			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
 	
