@@ -1,10 +1,10 @@
 [gd_scene load_steps=15 format=3 uid="uid://cslfff7vma661"]
 
-[ext_resource type="Script" path="res://Scripts/main.gd" id="1_1xql3"]
-[ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="1_myo7e"]
-[ext_resource type="Script" path="res://Scripts/Player.gd" id="3_j26w8"]
-[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="4_s0tu3"]
-[ext_resource type="PackedScene" uid="uid://bf0kv4uym6itl" path="res://bomb.tscn" id="5_mdjri"]
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_rsues"]
+[ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="2_lvpbt"]
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="3_j884j"]
+[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="4_xtucw"]
+[ext_resource type="PackedScene" uid="uid://bf0kv4uym6itl" path="res://Scenes/bomb.tscn" id="5_mdjri"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rjt1a"]
 texture = ExtResource("2_lvpbt")

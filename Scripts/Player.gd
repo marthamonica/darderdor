@@ -4,7 +4,7 @@ extends CharacterBody2D
 var n_bomb: int = 2
 @onready var animation: AnimationPlayer = $AnimationPlayer
 
-var bomb = preload("res://bomb.tscn")
+var bomb = preload("res://Scenes/bomb.tscn")
 
 func handleInput():
 	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")

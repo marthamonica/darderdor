@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://bf0kv4uym6itl"]
 
-[ext_resource type="Script" path="res://Scripts/Bomb.gd" id="1_g2o65"]
-[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_l58fq"]
+[ext_resource type="Script" path="res://Scripts/Bomb.gd" id="1_ip4y1"]
+[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_2ccvr"]
 
 [sub_resource type="Animation" id="Animation_wwns8"]
 length = 0.001
@@ -46,7 +46,7 @@ radius = 7.0
 
 [node name="Bomb" type="Area2D"]
 position = Vector2(14, 13)
-script = ExtResource("1_g2o65")
+script = ExtResource("1_ip4y1")
 metadata/_edit_group_ = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
@@ -55,7 +55,7 @@ libraries = {
 }
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_l58fq")
+texture = ExtResource("2_2ccvr")
 hframes = 14
 vframes = 24
 frame = 42
