@@ -1,9 +1,10 @@
-[gd_scene load_steps=14 format=3 uid="uid://cslfff7vma661"]
+[gd_scene load_steps=15 format=3 uid="uid://cslfff7vma661"]
 
-[ext_resource type="Script" path="res://Scripts/main.gd" id="1_rsues"]
-[ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="2_lvpbt"]
-[ext_resource type="Script" path="res://Scripts/Player.gd" id="3_j884j"]
-[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="4_xtucw"]
+[ext_resource type="Script" path="res://Scripts/main.gd" id="1_1xql3"]
+[ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="1_myo7e"]
+[ext_resource type="Script" path="res://Scripts/Player.gd" id="3_j26w8"]
+[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="4_s0tu3"]
+[ext_resource type="PackedScene" uid="uid://bf0kv4uym6itl" path="res://bomb.tscn" id="5_mdjri"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rjt1a"]
 texture = ExtResource("2_lvpbt")
@@ -713,6 +714,7 @@ texture = ExtResource("2_lvpbt")
 25:8/0 = 0
 25:8/0/physics_layer_0/linear_velocity = Vector2(0, 0)
 25:8/0/physics_layer_0/angular_velocity = 0.0
+25:8/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 25:8/0/custom_data_0 = true
 26:8/0 = 0
 26:8/0/physics_layer_0/linear_velocity = Vector2(0, 0)
@@ -1216,8 +1218,9 @@ _data = {
 "walkUp": SubResource("Animation_jstlv")
 }
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_agbxx"]
-size = Vector2(16, 16)
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bhynb"]
+radius = 6.0
+height = 14.0
 
 [node name="Node2D" type="Node2D"]
 script = ExtResource("1_rsues")
@@ -1262,4 +1265,7 @@ libraries = {
 }
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_agbxx")
+shape = SubResource("CapsuleShape2D_bhynb")
+
+[node name="Bomb" parent="." instance=ExtResource("5_mdjri")]
+visible = false
