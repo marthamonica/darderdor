@@ -1,7 +1,8 @@
 extends CharacterBody2D
 
 @export var speed: int = 100
-var n_bomb: int = 2
+@export var n_bomb: int = 2
+
 @onready var animation: AnimationPlayer = $AnimationPlayer
 
 var bomb = preload("res://Scenes/bomb.tscn")

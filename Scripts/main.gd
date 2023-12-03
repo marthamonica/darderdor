@@ -30,19 +30,9 @@ const spawn_pos = [Vector2i(1,1), Vector2i(1,11), Vector2i(17,1), Vector2i(17,11
 
 var is_destructible_custom_data = "is_destructible"
 
-func hydrateMap():
-	for y in range(tile_map.get_used_rect().size.y):
-		for x in range(tile_map.get_used_rect().size.x):
-			var atlas_coord = tile_map.get_cell_atlas_coords(ground_layer, Vector2(x, y))
-			if (atlas_coord == WALL_ATLAS_COORD):
-				var wall = RigidBody2D.new()
-				wall.position = Vector2(x, y) * tile_map.cell_quadrant_size
-				add_child(wall)
-
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
-	hydrateMap()
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
