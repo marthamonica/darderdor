@@ -7,20 +7,31 @@ const BOMB_ATLAS_COORD : Vector2i = Vector2i (6,5)
 const BOMB_COUNT_INC_POWER_UP_ATLAS_COORD : Vector2i = Vector2i (7,8)
 const BOMB_RADIUS_INC_POWER_UP_ATLAS_COORD : Vector2i = Vector2i (8,9)
 const PLAYER_SPEED_INC_POWER_UP_ATLAS_COORD : Vector2i = Vector2i (20,8)
-const BRICK_ATLAS_COORD  = Vector2i(25, 8)
-const WALL_ATLAS_COORD  = Vector2i(11, 3)
+const BRICK_ATLAS_COORD : Vector2i = Vector2i(25, 8)
+const WALL_ATLAS_COORD : Vector2i = Vector2i(11, 3)
 
 var ground_layer : int = 0
 var power_up_layer : int = 1
 var tile_source_id : int = 0
 
+#grid
+var grid_x : int = 17
+var grid_y : int = 11
+
 #power up
 var bomb_timer : float = 1.5
-var bomb_radius : int = 1
-var bomb_count : int = 1
-var player_speed : float = 1
+
+var initial_bomb_radius : int = 1
+var initial_bomb_count : int = 1
+var initial_player_speed : float = 1
+
 var player_speed_modifier : float = 0.5
+var bomb_radius_modifier : int = 1
 var bomb_placed_count : int = 0
+
+var additional_bomb_power_up_count : int = 0
+var player_speed_power_up_count : int = 0
+var bomb_radius_power_up_count : int = 0
 
 #player inventory
 var life_count : int = 3
@@ -36,7 +47,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
-	get_node("Label").text = "Life = " + str(life_count) + "\n" + "Bomb count = " + str(bomb_count) + "\n" + "Bomb radius = " + str(bomb_radius) + "\n" + "Player speed = " + str(player_speed)
+	get_node("Label").text = "Life = " + str(life_count) + "\n" + "Bomb count = " + str(initial_bomb_count + additional_bomb_power_up_count) + "\n" + "Bomb radius = " + str(initial_bomb_radius + (bomb_radius_power_up_count * bomb_radius_modifier)) + "\n" + "Player speed = " + str(initial_player_speed + (player_speed_power_up_count * player_speed_modifier))
 
 func _input(event):
 	if Input.is_action_just_pressed("click"):
@@ -52,20 +63,20 @@ func _input(event):
 			
 			match power_up_atlas_coord:
 				BOMB_COUNT_INC_POWER_UP_ATLAS_COORD:
-					bomb_count += 1
+					additional_bomb_power_up_count += 1
 					tile_map.set_cell(power_up_layer, tile_coord, -1)
 				BOMB_RADIUS_INC_POWER_UP_ATLAS_COORD:
-					bomb_radius += 1
+					bomb_radius_power_up_count += 1
 					tile_map.set_cell(power_up_layer, tile_coord, -1)
 				PLAYER_SPEED_INC_POWER_UP_ATLAS_COORD:
-					player_speed += 0.5
+					player_speed_power_up_count += 1
 					tile_map.set_cell(power_up_layer, tile_coord, -1)
 				_:
 					#if there is no power up place bomb and we have more bomb to place
-					if (bomb_placed_count < bomb_count): 
+					if (bomb_placed_count < (initial_bomb_count + additional_bomb_power_up_count)): 
 						bomb_placed_count += 1
 						tile_map.set_cell(ground_layer, tile_coord, tile_source_id, BOMB_ATLAS_COORD)
-						trigger_bomb_timer(tile_coord, bomb_timer, bomb_radius)
+						trigger_bomb_timer(tile_coord, bomb_timer, initial_bomb_radius + (bomb_radius_power_up_count * bomb_radius_modifier))
 
 
 func trigger_bomb_timer(tile_coord, time, radius):
@@ -114,8 +125,51 @@ func check_player_in_coord(tile_coord):
 		var new_pos : Vector2i = spawn_pos[randi() % spawn_pos.size()]
 		$Player.set_position(tile_map.map_to_local(new_pos))
 		
-		#TODO : reset player power up
+		#reset player power up
+		sprinkle_power_up()
 		
 		if (life_count == 0):
 			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+
+func is_valid_position_for_power_up(tile_coord):
+	#check if it's the player position
+	if (get_player_coord() == tile_coord):
+		return false
+		
+	#check if the tile is available on ground layer
+	if (tile_map.get_cell_source_id(ground_layer, tile_coord) != INVALID_CELL):
+		return false
 	
+	#check if tile is available on power up layer
+	if (tile_map.get_cell_source_id(power_up_layer, tile_coord) != INVALID_CELL):
+		return false
+		
+	return true
+	
+func find_valid_power_up_loc():
+	var pos_x : int = randi_range(1, grid_x)
+	var pos_y : int = randi_range(1, grid_y)
+	var pos : Vector2i = Vector2i(pos_x, pos_y)
+	
+	while (!is_valid_position_for_power_up(pos)):
+		pos_x = randi_range(1, grid_x)
+		pos_y = randi_range(1, grid_y)
+		pos = Vector2i(pos_x, pos_y)
+	
+	return pos
+	
+func sprinkle_power_up():
+	#sprinkle additional bomb power up and reset
+	for x in additional_bomb_power_up_count:
+		tile_map.set_cell(power_up_layer, find_valid_power_up_loc(), tile_source_id, BOMB_COUNT_INC_POWER_UP_ATLAS_COORD)
+	additional_bomb_power_up_count = 0
+	
+	#sprinkle bomb radius power up and reset
+	for x in bomb_radius_power_up_count:
+		tile_map.set_cell(power_up_layer, find_valid_power_up_loc(), tile_source_id, BOMB_RADIUS_INC_POWER_UP_ATLAS_COORD)
+	bomb_radius_power_up_count = 0
+	
+	#sprinkle player speed power up and reset
+	for x in player_speed_power_up_count:
+		tile_map.set_cell(power_up_layer, find_valid_power_up_loc(), tile_source_id, PLAYER_SPEED_INC_POWER_UP_ATLAS_COORD)
+	player_speed_power_up_count = 0
