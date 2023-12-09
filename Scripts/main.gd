@@ -119,17 +119,20 @@ func get_player_coord():
 
 func check_player_in_coord(tile_coord):
 	if (get_player_coord() == tile_coord):
-		life_count -= 1
+		reset_game()
+
+func reset_game():
+	life_count -= 1
 		
-		#pick a new starting pos
-		var new_pos : Vector2i = spawn_pos[randi() % spawn_pos.size()]
-		$Player.set_position(tile_map.map_to_local(new_pos))
-		
-		#reset player power up
-		sprinkle_power_up()
-		
-		if (life_count == 0):
-			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+	#pick a new starting pos
+	var new_pos : Vector2i = spawn_pos[randi() % spawn_pos.size()]
+	$Player.set_position(tile_map.map_to_local(new_pos))
+	
+	#reset player power up
+	sprinkle_power_up()
+	
+	if (life_count == 0):
+		get_tree().change_scene_to_file("res://Scenes/menu.tscn")
 
 func is_valid_position_for_power_up(tile_coord):
 	#check if it's the player position
@@ -173,3 +176,6 @@ func sprinkle_power_up():
 	for x in player_speed_power_up_count:
 		tile_map.set_cell(power_up_layer, find_valid_power_up_loc(), tile_source_id, PLAYER_SPEED_INC_POWER_UP_ATLAS_COORD)
 	player_speed_power_up_count = 0
+
+func _on_player_dead():
+	reset_game()

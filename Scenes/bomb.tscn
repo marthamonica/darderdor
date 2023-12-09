@@ -1,54 +1,51 @@
-[gd_scene load_steps=5 format=3 uid="uid://bf0kv4uym6itl"]
+[gd_scene load_steps=7 format=3 uid="uid://bf0kv4uym6itl"]
 
 [ext_resource type="Script" path="res://Scripts/Bomb.gd" id="1_ip4y1"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_2ccvr"]
 
-[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_fmaxf"]
-texture = ExtResource("2_2ccvr")
-0:4/size_in_atlas = Vector2i(5, 5)
-0:4/animation_columns = 2
-0:4/animation_speed = 4.0
-0:4/animation_frame_0/duration = 1.0
-0:4/animation_frame_1/duration = 1.0
-0:4/animation_frame_2/duration = 1.0
-0:4/animation_frame_3/duration = 1.0
-0:4/0 = 0
-0:3/animation_columns = 3
-0:3/animation_speed = 4.0
-0:3/animation_frame_0/duration = 1.0
-0:3/animation_frame_1/duration = 1.0
-0:3/animation_frame_2/duration = 1.0
-0:3/0 = 0
+[sub_resource type="AtlasTexture" id="AtlasTexture_fsj54"]
+atlas = ExtResource("2_2ccvr")
+region = Rect2(0, 48, 16, 16)
 
-[sub_resource type="TileSet" id="TileSet_cdqdd"]
-sources/0 = SubResource("TileSetAtlasSource_fmaxf")
+[sub_resource type="AtlasTexture" id="AtlasTexture_3mf8l"]
+atlas = ExtResource("2_2ccvr")
+region = Rect2(16, 48, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2n752"]
+atlas = ExtResource("2_2ccvr")
+region = Rect2(32, 48, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nfuc3"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fsj54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3mf8l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2n752")
+}],
+"loop": true,
+"name": &"tick",
+"speed": 4.0
+}]
 
 [node name="Bomb" type="Node2D"]
-position = Vector2(54, 24)
+position = Vector2(90, 132)
 script = ExtResource("1_ip4y1")
+metadata/_edit_group_ = true
 
 [node name="TickingTimer" type="Timer" parent="."]
 wait_time = 1.5
 one_shot = true
 autostart = true
 
-[node name="BangTimer" type="Timer" parent="."]
-one_shot = true
-
-[node name="TileMap" type="TileMap" parent="."]
-position = Vector2(-8, -9)
-tile_set = SubResource("TileSet_cdqdd")
-format = 2
-layer_0/name = "bomb"
-layer_0/z_index = 1
-layer_0/tile_data = PackedInt32Array(0, 0, 3)
-layer_1/name = "bang"
-layer_1/enabled = false
-layer_1/modulate = Color(1, 1, 1, 1)
-layer_1/y_sort_enabled = false
-layer_1/y_sort_origin = 0
-layer_1/z_index = 0
-layer_1/tile_data = PackedInt32Array(0, 0, 4)
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_nfuc3")
+animation = &"tick"
+autoplay = "tick"
+frame_progress = 0.00962017
 
 [connection signal="timeout" from="TickingTimer" to="." method="_on_ticking_timer_timeout"]
-[connection signal="timeout" from="BangTimer" to="." method="_on_bang_timer_timeout"]

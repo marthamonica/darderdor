@@ -1,0 +1,128 @@
+[gd_scene load_steps=17 format=3 uid="uid://cyje6xov74dpy"]
+
+[ext_resource type="Script" path="res://Scripts/Flame.gd" id="1_djqhx"]
+[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="1_n8at7"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x0s1n"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(32, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aluff"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(112, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eec6j"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(32, 176, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j803n"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(112, 176, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wtpf7"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(32, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rr72t"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(112, 64, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwdk1"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(32, 144, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tedt1"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(112, 144, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jni4u"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(32, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q7qvy"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(112, 80, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xubhs"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(32, 160, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mm7mm"]
+atlas = ExtResource("1_n8at7")
+region = Rect2(112, 160, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f2w24"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x0s1n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aluff")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eec6j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j803n")
+}],
+"loop": false,
+"name": &"core",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wtpf7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rr72t")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwdk1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tedt1")
+}],
+"loop": false,
+"name": &"edge",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jni4u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q7qvy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xubhs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mm7mm")
+}],
+"loop": false,
+"name": &"strand",
+"speed": 4.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5s8l7"]
+size = Vector2(16, 16)
+
+[node name="Flame" type="Node2D"]
+position = Vector2(53, 33)
+script = ExtResource("1_djqhx")
+metadata/_edit_group_ = true
+
+[node name="SpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_f2w24")
+animation = &"edge"
+
+[node name="HitBox" type="Area2D" parent="." groups=["hazard"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource("RectangleShape2D_5s8l7")
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
