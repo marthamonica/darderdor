@@ -14,10 +14,10 @@ enum Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
 var flame = preload("res://Scenes/flame.tscn")
 
 func _ready():
-	blast_up.target_position = Vector2i(0, -reach * 16)
-	blast_down.target_position = Vector2i(0, reach * 16)
-	blast_left.target_position = Vector2i(-reach * 16, 0)
-	blast_right.target_position = Vector2i(reach * 16, 0)
+	blast_up.target_position = reach * 16 * Vector2.UP
+	blast_down.target_position = reach * 16 * Vector2.DOWN
+	blast_left.target_position = reach * 16 * Vector2.LEFT
+	blast_right.target_position = reach * 16 * Vector2.RIGHT
 	
 
 func blaze():
@@ -32,13 +32,13 @@ func extend_blaze(ref: Vector2, n: int, direction: Direction):
 	flame_instance.direction = direction * 90
 	match direction: 
 		Direction.UP:
-			flame_instance.position = ref + Vector2(0, -16)
+			flame_instance.position = ref + 16 * Vector2.UP
 		Direction.RIGHT:
-			flame_instance.position = ref + Vector2(16, 0)
+			flame_instance.position = ref + 16 * Vector2.RIGHT
 		Direction.DOWN:
-			flame_instance.position = ref + Vector2(0, 16)
+			flame_instance.position = ref + 16 * Vector2.DOWN
 		Direction.LEFT:
-			flame_instance.position = ref + Vector2(-16, 0)
+			flame_instance.position = ref + 16 * Vector2.LEFT
 	
 	if (n > 0):
 		flame_instance.type = "strand"
@@ -53,35 +53,35 @@ func project_blasts() -> Array[int]:
 	var right = reach
 	var down = reach
 	var left = reach
+	const collision_threshold = 1 # prevent wrong rounding to tile coordinates
 
 	if (blast_up.is_colliding()):
 		var y_collision = abs(blast_up.get_collision_point().y - position.y)
-		up = abs(ceil(y_collision / 16))
-		emit_signal("destroy", blast_up.get_collision_point())
+		up = ceil(y_collision / 16)
+		emit_signal("destroy", blast_up.get_collision_point() + collision_threshold * Vector2.UP)
 	
 	if (blast_down.is_colliding()):
 		var y_collision = abs(blast_down.get_collision_point().y - position.y)
 		down = ceil(y_collision / 16)
-		emit_signal("destroy", blast_down.get_collision_point())
+		emit_signal("destroy", blast_down.get_collision_point() + collision_threshold * Vector2.DOWN)
 	
 	if (blast_left.is_colliding()):
 		var x_collision = abs(blast_left.get_collision_point().x - position.x)
 		left = ceil(x_collision / 16)
-		emit_signal("destroy", blast_left.get_collision_point())
+		emit_signal("destroy", blast_left.get_collision_point() + collision_threshold * Vector2.LEFT)
 	
 	if (blast_right.is_colliding()):
 		var x_collision = abs(blast_right.get_collision_point().x - position.x)
 		right = ceil(x_collision / 16)
-		emit_signal("destroy", blast_right.get_collision_point())
+		emit_signal("destroy", blast_right.get_collision_point() + collision_threshold * Vector2.RIGHT)
 	
-	print(up, right, down, left)
 	return [up, right, down, left]
 	
 	
 func _on_ticking_timer_timeout():
 	emit_signal("explode")
-	var blast_reaches = project_blasts()
 	blaze()
+	var blast_reaches = project_blasts()
 	extend_blaze(position, blast_reaches[0], Direction.UP)
 	extend_blaze(position, blast_reaches[1], Direction.RIGHT)
 	extend_blaze(position, blast_reaches[2], Direction.DOWN)

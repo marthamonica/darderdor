@@ -177,5 +177,15 @@ func sprinkle_power_up():
 		tile_map.set_cell(power_up_layer, find_valid_power_up_loc(), tile_source_id, PLAYER_SPEED_INC_POWER_UP_ATLAS_COORD)
 	player_speed_power_up_count = 0
 
+func spawn_bomb(bomb_instance: Node, pos: Vector2):
+	var tile_coord = tile_map.local_to_map(pos)
+	bomb_instance.position = tile_map.map_to_local(tile_coord)
+	bomb_instance.connect("destroy", _on_bomb_destroy)
+	add_child(bomb_instance)
+
+func _on_bomb_destroy(pos: Vector2):
+	var tile_coord = tile_map.local_to_map(pos)
+	remove_destructable(tile_coord)
+
 func _on_player_dead():
 	reset_game()

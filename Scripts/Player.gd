@@ -43,10 +43,12 @@ func _physics_process(delta):
 
 func spawn_bomb():
 	n_bomb -= 1
+	var world = get_tree().root.get_node("World") 
 	var bomb_instance = bomb.instantiate()
-	bomb_instance.position = position
+	#bomb_instance.position = position
 	bomb_instance.connect("explode", on_bomb_exploding)
-	get_parent().add_child(bomb_instance)
+	world.spawn_bomb(bomb_instance, self.position)
+	#get_parent().add_child(bomb_instance)
 	
 func on_bomb_exploding():
 	n_bomb += 1
