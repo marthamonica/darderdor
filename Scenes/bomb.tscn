@@ -48,4 +48,16 @@ animation = &"tick"
 autoplay = "tick"
 frame_progress = 0.00962017
 
+[node name="BlastCast_down" type="RayCast2D" parent="."]
+target_position = Vector2(0, 0)
+
+[node name="BlastCast_up" type="RayCast2D" parent="."]
+target_position = Vector2(0, 0)
+
+[node name="BlastCast_right" type="RayCast2D" parent="."]
+target_position = Vector2(0, 0)
+
+[node name="BlastCast_left" type="RayCast2D" parent="."]
+target_position = Vector2(0, 0)
+
 [connection signal="timeout" from="TickingTimer" to="." method="_on_ticking_timer_timeout"]

@@ -44,7 +44,6 @@ func _physics_process(delta):
 func spawn_bomb():
 	n_bomb -= 1
 	var bomb_instance = bomb.instantiate()
-	bomb_instance.reach = 3
 	bomb_instance.position = position
 	bomb_instance.connect("explode", on_bomb_exploding)
 	get_parent().add_child(bomb_instance)
