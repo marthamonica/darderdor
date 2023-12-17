@@ -106,7 +106,7 @@ animations = [{
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5s8l7"]
-size = Vector2(16, 16)
+size = Vector2(8, 13)
 
 [node name="Flame" type="Node2D"]
 position = Vector2(53, 33)
@@ -121,8 +121,10 @@ sprite_frames = SubResource("SpriteFrames_f2w24")
 animation = &"edge"
 
 [node name="HitBox" type="Area2D" parent="." groups=["hazard"]]
+collision_mask = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+position = Vector2(0, 1.5)
 shape = SubResource("RectangleShape2D_5s8l7")
 
 [connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]

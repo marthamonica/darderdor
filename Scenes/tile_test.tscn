@@ -2238,6 +2238,7 @@ autowrap_mode = 2
 [node name="Player" type="CharacterBody2D" parent="."]
 z_index = 1
 position = Vector2(24, 24)
+collision_layer = 2
 script = ExtResource("3_j884j")
 metadata/_edit_group_ = true
 
@@ -2256,16 +2257,16 @@ libraries = {
 shape = SubResource("CapsuleShape2D_bhynb")
 
 [node name="HurtBox" type="Area2D" parent="Player"]
+collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/HurtBox"]
 shape = SubResource("RectangleShape2D_d6y1l")
 
 [node name="Bomb" parent="." instance=ExtResource("5_mdjri")]
-visible = false
 position = Vector2(0, 0)
 
 [node name="Flame" parent="." instance=ExtResource("6_0xgef")]
-visible = false
+position = Vector2(0, 0)
 
 [connection signal="dead" from="Player" to="." method="_on_player_dead"]
 [connection signal="animation_finished" from="Player/AnimationPlayer" to="Player" method="_on_animation_player_animation_finished"]
