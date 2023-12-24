@@ -25,28 +25,15 @@ func blaze():
 	flame_instance.position = position
 	get_parent().add_child(flame_instance)
 	
-func extend_blaze(ref: Vector2, n: int, direction: Direction):
-	assert( n > 0, "ERROR: Bomb reach should be greater than 0" )
-	n -= 1
-	var flame_instance = flame.instantiate()
-	flame_instance.direction = direction * 90
-	match direction: 
-		Direction.UP:
-			flame_instance.position = ref + 16 * Vector2.UP
-		Direction.RIGHT:
-			flame_instance.position = ref + 16 * Vector2.RIGHT
-		Direction.DOWN:
-			flame_instance.position = ref + 16 * Vector2.DOWN
-		Direction.LEFT:
-			flame_instance.position = ref + 16 * Vector2.LEFT
-	
+func extend_blaze(n: int, direction: Vector2):
+	assert( n >= 0, "ERROR: Bomb reach cannot be negative value" )
 	if (n > 0):
-		flame_instance.type = "strand"
-		extend_blaze(flame_instance.position, n, direction)
-	else:
-		flame_instance.type = "edge"
-		
-	get_parent().add_child(flame_instance)
+		var flame_instance = flame.instantiate()
+		flame_instance.direction = atan2(direction.x, -direction.y)
+		flame_instance.position = position + (16 * n * direction)
+		flame_instance.type = "edge" if n == reach else "strand"
+		get_parent().add_child(flame_instance)
+		extend_blaze(n-1, direction)
 
 func project_blasts() -> Array[int]:
 	var up = reach
@@ -57,22 +44,22 @@ func project_blasts() -> Array[int]:
 
 	if (blast_up.is_colliding()):
 		var y_collision = abs(blast_up.get_collision_point().y - position.y)
-		up = ceil(y_collision / 16)
+		up = floor(y_collision / 16)
 		emit_signal("destroy", blast_up.get_collision_point() + collision_threshold * Vector2.UP)
 	
 	if (blast_down.is_colliding()):
 		var y_collision = abs(blast_down.get_collision_point().y - position.y)
-		down = ceil(y_collision / 16)
+		down = floor(y_collision / 16)
 		emit_signal("destroy", blast_down.get_collision_point() + collision_threshold * Vector2.DOWN)
 	
 	if (blast_left.is_colliding()):
 		var x_collision = abs(blast_left.get_collision_point().x - position.x)
-		left = ceil(x_collision / 16)
+		left = floor(x_collision / 16)
 		emit_signal("destroy", blast_left.get_collision_point() + collision_threshold * Vector2.LEFT)
 	
 	if (blast_right.is_colliding()):
 		var x_collision = abs(blast_right.get_collision_point().x - position.x)
-		right = ceil(x_collision / 16)
+		right = floor(x_collision / 16)
 		emit_signal("destroy", blast_right.get_collision_point() + collision_threshold * Vector2.RIGHT)
 	
 	return [up, right, down, left]
@@ -82,8 +69,8 @@ func _on_ticking_timer_timeout():
 	emit_signal("explode")
 	blaze()
 	var blast_reaches = project_blasts()
-	extend_blaze(position, blast_reaches[0], Direction.UP)
-	extend_blaze(position, blast_reaches[1], Direction.RIGHT)
-	extend_blaze(position, blast_reaches[2], Direction.DOWN)
-	extend_blaze(position, blast_reaches[3], Direction.LEFT)
+	extend_blaze(blast_reaches[0], Vector2.UP)
+	extend_blaze(blast_reaches[1], Vector2.RIGHT)
+	extend_blaze(blast_reaches[2], Vector2.DOWN)
+	extend_blaze(blast_reaches[3], Vector2.LEFT)
 	queue_free()

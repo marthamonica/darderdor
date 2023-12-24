@@ -2239,6 +2239,7 @@ autowrap_mode = 2
 z_index = 1
 position = Vector2(24, 24)
 collision_layer = 2
+collision_mask = 5
 script = ExtResource("3_j884j")
 metadata/_edit_group_ = true
 
