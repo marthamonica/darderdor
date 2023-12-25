@@ -54,7 +54,6 @@ func on_bomb_exploding():
 	n_bomb += 1
 
 func _on_hurt_box_area_entered(area: Area2D):
-	print(area.get_groups())
 	if area.is_in_group("hazard"):
 		is_alive = false
 

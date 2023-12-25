@@ -1,7 +1,23 @@
-[gd_scene load_steps=8 format=3 uid="uid://bf0kv4uym6itl"]
+[gd_scene load_steps=12 format=3 uid="uid://bf0kv4uym6itl"]
 
 [ext_resource type="Script" path="res://Scripts/Bomb.gd" id="1_ip4y1"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_2ccvr"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x0s1n"]
+atlas = ExtResource("2_2ccvr")
+region = Rect2(32, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aluff"]
+atlas = ExtResource("2_2ccvr")
+region = Rect2(112, 96, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_eec6j"]
+atlas = ExtResource("2_2ccvr")
+region = Rect2(32, 176, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j803n"]
+atlas = ExtResource("2_2ccvr")
+region = Rect2(112, 176, 16, 16)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_fsj54"]
 atlas = ExtResource("2_2ccvr")
@@ -17,6 +33,23 @@ region = Rect2(32, 48, 16, 16)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_nfuc3"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x0s1n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aluff")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_eec6j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j803n")
+}],
+"loop": false,
+"name": &"explode",
+"speed": 4.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_fsj54")
@@ -47,9 +80,8 @@ autostart = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_nfuc3")
-animation = &"tick"
+animation = &"explode"
 autoplay = "tick"
-frame_progress = 0.00962017
 
 [node name="BlastCast_down" type="RayCast2D" parent="."]
 target_position = Vector2(0, 0)
@@ -67,9 +99,10 @@ collide_with_areas = true
 target_position = Vector2(0, 0)
 collide_with_areas = true
 
-[node name="Area2D" type="Area2D" parent="."]
+[node name="Area2D" type="Area2D" parent="." groups=["explosive"]]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
 shape = SubResource("RectangleShape2D_hqo67")
 
 [connection signal="timeout" from="TickingTimer" to="." method="_on_ticking_timer_timeout"]
+[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
