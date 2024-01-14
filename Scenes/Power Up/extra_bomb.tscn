@@ -1,0 +1,28 @@
+[gd_scene load_steps=5 format=3 uid="uid://dr73f72wykhiq"]
+
+[ext_resource type="Script" path="res://Scripts/PowerUp.gd" id="1_lcn2n"]
+[ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_y57tf"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r4ere"]
+atlas = ExtResource("2_y57tf")
+region = Rect2(0, 224, 16, 16)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_hqo67"]
+size = Vector2(16, 16)
+
+[node name="ExtraBomb" type="Node2D"]
+position = Vector2(90, 132)
+script = ExtResource("1_lcn2n")
+display_name = "Extra Bomb"
+metadata/_edit_group_ = true
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = SubResource("AtlasTexture_r4ere")
+
+[node name="Area2D" type="Area2D" parent="." groups=["explosive"]]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("RectangleShape2D_hqo67")
+debug_color = Color(0, 0.6, 0.701961, 0)
+
+[connection signal="area_entered" from="Area2D" to="." method="_on_area_2d_area_entered"]

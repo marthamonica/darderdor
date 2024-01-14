@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://cslfff7vma661"]
+[gd_scene load_steps=20 format=3 uid="uid://cslfff7vma661"]
 
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_rsues"]
 [ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="2_lvpbt"]
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="3_j884j"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="4_xtucw"]
+[ext_resource type="Script" path="res://Scripts/Inventory.gd" id="5_0olbe"]
 [ext_resource type="PackedScene" uid="uid://bf0kv4uym6itl" path="res://Scenes/bomb.tscn" id="5_mdjri"]
 [ext_resource type="PackedScene" uid="uid://cyje6xov74dpy" path="res://Scenes/flame.tscn" id="6_0xgef"]
 
@@ -2271,6 +2272,9 @@ collision_layer = 2
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Player/HurtBox"]
 shape = SubResource("RectangleShape2D_d6y1l")
+
+[node name="Inventory" type="Node" parent="Player/HurtBox"]
+script = ExtResource("5_0olbe")
 
 [node name="Bomb" parent="." instance=ExtResource("5_mdjri")]
 visible = false

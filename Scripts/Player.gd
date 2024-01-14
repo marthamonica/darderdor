@@ -8,6 +8,7 @@ signal dead
 
 @onready var animation: AnimationPlayer = $AnimationPlayer
 
+const power_up = preload("res://Scripts/PowerUp.gd")
 var bomb = preload("res://Scenes/bomb.tscn")
 
 func handleInput():
@@ -56,6 +57,15 @@ func on_bomb_exploding():
 func _on_hurt_box_area_entered(area: Area2D):
 	if area.is_in_group("hazard"):
 		is_alive = false
+		
+	else:
+		var powerup = area.get_parent() as PowerUp
+		if (powerup):
+			var inventory = find_child("Inventory")
+	
+			if (inventory):
+				inventory.add_item(powerup.display_name)
+				powerup.destroy()
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "dead":

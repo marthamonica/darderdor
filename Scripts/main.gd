@@ -41,9 +41,26 @@ const spawn_pos = [Vector2i(1,1), Vector2i(1,11), Vector2i(17,1), Vector2i(17,11
 
 var is_destructible_custom_data = "is_destructible"
 
+const pu_extra_bomb = preload("res://Scenes/Power Up/extra_bomb.tscn")
+const pu_accelerator = preload("res://Scenes/Power Up/accelerator.tscn")
+const pu_explosion_expander = preload("res://Scenes/Power Up/explosion_expander.tscn")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	
+	# HARDCODED FOR NOW (TESTING PURPOSES)
+	var pu = pu_explosion_expander.instantiate()
+	pu.position = tile_map.map_to_local(Vector2i(3, 1))
+	add_child(pu)
+	
+	pu = pu_extra_bomb.instantiate()
+	pu.position = tile_map.map_to_local(Vector2i(1, 3))
+	add_child(pu)
+	
+	pu = pu_accelerator.instantiate()
+	pu.position = tile_map.map_to_local(Vector2i(3, 3))
+	add_child(pu)
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
