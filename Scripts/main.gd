@@ -41,6 +41,7 @@ const spawn_pos = [Vector2i(1,1), Vector2i(1,11), Vector2i(17,1), Vector2i(17,11
 
 var is_destructible_custom_data = "is_destructible"
 
+const player = preload("res://Scenes/player.tscn")
 const pu_extra_bomb = preload("res://Scenes/Power Up/extra_bomb.tscn")
 const pu_accelerator = preload("res://Scenes/Power Up/accelerator.tscn")
 const pu_explosion_expander = preload("res://Scenes/Power Up/explosion_expander.tscn")
@@ -48,6 +49,11 @@ const pu_explosion_expander = preload("res://Scenes/Power Up/explosion_expander.
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
+	
+	spawn_player(Vector2(1, 1))
+	spawn_player(Vector2(17, 1))
+	spawn_player(Vector2(1, 11))
+	spawn_player(Vector2(17, 11))
 	
 	# HARDCODED FOR NOW (TESTING PURPOSES)
 	var pu = pu_explosion_expander.instantiate()
@@ -142,8 +148,8 @@ func reset_game():
 	life_count -= 1
 		
 	#pick a new starting pos
-	var new_pos : Vector2i = spawn_pos[randi() % spawn_pos.size()]
-	$Player.set_position(tile_map.map_to_local(new_pos))
+	#var new_pos : Vector2i = spawn_pos[randi() % spawn_pos.size()]
+	#$Player.set_position(tile_map.map_to_local(new_pos))
 	
 	#reset player power up
 	sprinkle_power_up()
@@ -193,6 +199,12 @@ func sprinkle_power_up():
 	for x in player_speed_power_up_count:
 		tile_map.set_cell(power_up_layer, find_valid_power_up_loc(), tile_source_id, PLAYER_SPEED_INC_POWER_UP_ATLAS_COORD)
 	player_speed_power_up_count = 0
+	
+func spawn_player(tile_coord: Vector2):
+	var player_instance = player.instantiate()
+	player_instance.position = tile_map.map_to_local(tile_coord)
+	add_child(player_instance)
+	
 
 func spawn_bomb(bomb_instance: Node, pos: Vector2):
 	var tile_coord = tile_map.local_to_map(pos)
