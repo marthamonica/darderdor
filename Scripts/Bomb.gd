@@ -5,7 +5,7 @@ signal destroy(pos: Vector2)
 
 enum Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
 
-@export var reach: int = 3
+@export var reach: int = 1
 @onready var blast_up = $BlastCast_up
 @onready var blast_down = $BlastCast_down
 @onready var blast_right = $BlastCast_right

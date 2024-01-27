@@ -3,7 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/main.gd" id="1_7wbpx"]
 [ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="2_7cbqh"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="3_nonap"]
-[ext_resource type="Script" path="res://Scripts/PowerUpDistributionData.gd" id="7_43kih"]
+[ext_resource type="Script" path="res://Scripts/LevelSetting.gd" id="7_43kih"]
 [ext_resource type="PackedScene" uid="uid://rv7jra4i10jr" path="res://Scenes/Power Up/accelerator.tscn" id="8_jmkec"]
 [ext_resource type="PackedScene" uid="uid://bixducswym0b1" path="res://Scenes/Power Up/explosion_expander.tscn" id="9_a2t67"]
 [ext_resource type="PackedScene" uid="uid://dr73f72wykhiq" path="res://Scenes/Power Up/extra_bomb.tscn" id="10_3rw5j"]
@@ -2123,7 +2123,7 @@ theme_override_colors/font_color = Color(0, 0, 0, 1)
 theme_override_font_sizes/font_size = 12
 autowrap_mode = 2
 
-[node name="PowerUpDistributionData" type="Node" parent="."]
+[node name="LevelSetting" type="Node" parent="."]
 script = ExtResource("7_43kih")
 power_up_distributions = {
 ExtResource("8_jmkec"): 5,

@@ -35,21 +35,21 @@ const spawn_pos = [Vector2i(1,1), Vector2i(1,11), Vector2i(17,1), Vector2i(17,11
 var power_up_pos : Dictionary = {}
 
 var is_destructible_custom_data = "is_destructible"
-
 const player = preload("res://Scenes/player.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	randomize()
 	
-	for pos in spawn_pos:
-		spawn_player(pos)
+	var levelSetting = find_child("LevelSetting")
+	if (!levelSetting):
+		print_debug("Game can't be started. No level setting found.")
+		return
+	
+	for idx in levelSetting.number_of_player:
+		spawn_player(spawn_pos[idx])
 		
 	sprinkle_power_up(true)
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	get_node("Label").text = "Life = " + str(life_count) + "\n" + "Bomb count = " + str(initial_bomb_count + additional_bomb_power_up_count) + "\n" + "Bomb radius = " + str(initial_bomb_radius + (bomb_radius_power_up_count * bomb_radius_modifier)) + "\n" + "Player speed = " + str(initial_player_speed + (player_speed_power_up_count * player_speed_modifier))
 
 func remove_destructable(tile_coord : Vector2i):
 	#remove all destructible on ground layer
@@ -115,10 +115,10 @@ func find_valid_power_up_loc(is_init : bool):
 	
 func sprinkle_power_up(is_init : bool):
 	if (is_init):
-		var powerUpDistData = find_child("PowerUpDistributionData")
-		if (powerUpDistData):
-			for item in powerUpDistData.power_up_distributions:
-				for x in powerUpDistData.power_up_distributions[item]:
+		var levelSetting = find_child("LevelSetting")
+		if (levelSetting):
+			for item in levelSetting.power_up_distributions:
+				for x in levelSetting.power_up_distributions[item]:
 					power_up_pos[find_valid_power_up_loc(true)] = item
 	else:
 		var inventory = find_child("Inventory")
