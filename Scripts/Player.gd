@@ -1,9 +1,11 @@
 extends CharacterBody2D
 
-signal dead
+signal dead(power_ups : Dictionary)
 
+@export var starting_pos : Vector2i
 @export var initial_speed: int = 100
 @export var bomb_count: int = 1
+@export var life_count: int = 3
 @onready var is_alive: bool = true
 
 @onready var animation: AnimationPlayer = $AnimationPlayer
@@ -23,6 +25,8 @@ func _input(event):
 	if event is InputEventKey:
 		if event.keycode == KEY_SPACE && event.pressed:
 			if (bomb_count > 0): spawn_bomb()
+		if event.keycode == KEY_D && event.pressed: # temporary to test out sprinkling power up when dead
+			reset_player_state()
 
 func updateAnimation():
 	if velocity.length() == 0 && animation.is_playing():
@@ -82,3 +86,18 @@ func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "dead":
 		#emit_signal("dead")
 		queue_free()
+		
+func reset_player_state():
+	life_count -= 1
+	if (life_count == 0):
+		queue_free()
+		
+	additional_speed = 0
+	additional_bomb_reach = 0
+	bomb_count = 1
+	position = starting_pos
+	
+	var inventory = find_child("Inventory")
+	if (inventory):
+		emit_signal("dead", inventory.power_ups)
+		inventory.remove_all_item()

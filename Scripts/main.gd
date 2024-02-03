@@ -12,24 +12,6 @@ var tile_source_id : int = 0
 var grid_x : int = 17
 var grid_y : int = 11
 
-#power up
-var bomb_timer : float = 1.5
-
-var initial_bomb_radius : int = 1
-var initial_bomb_count : int = 1
-var initial_player_speed : float = 1
-
-var player_speed_modifier : float = 0.5
-var bomb_radius_modifier : int = 1
-var bomb_placed_count : int = 0
-
-var additional_bomb_power_up_count : int = 0
-var player_speed_power_up_count : int = 0
-var bomb_radius_power_up_count : int = 0
-
-#player inventory
-var life_count : int = 3
-
 #spawn point
 const spawn_pos = [Vector2i(1,1), Vector2i(1,11), Vector2i(17,1), Vector2i(17,11)]
 var power_up_pos : Dictionary = {}
@@ -49,7 +31,7 @@ func _ready():
 	for idx in levelSetting.number_of_player:
 		spawn_player(spawn_pos[idx])
 		
-	sprinkle_power_up(true)
+	init_power_up()
 
 func remove_destructable(tile_coord : Vector2i):
 	#remove all destructible on ground layer
@@ -70,29 +52,19 @@ func remove_destructable(tile_coord : Vector2i):
 func get_player_coord():
 	return tile_map.local_to_map($Player.get_position())
 
-func check_player_in_coord(tile_coord):
-	if (get_player_coord() == tile_coord):
-		reset_game()
-
-func reset_game():
-	life_count -= 1
-		
-	#pick a new starting pos
-	#var new_pos : Vector2i = spawn_pos[randi() % spawn_pos.size()]
-	#$Player.set_position(tile_map.map_to_local(new_pos))
-	
-	#reset player power up
-	sprinkle_power_up(false)
-	
-	if (life_count == 0):
-		get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+#func reset_game():
+	#get_tree().change_scene_to_file("res://Scenes/menu.tscn")
 
 func is_valid_position_for_power_up(tile_coord : Vector2i, is_init : bool):
 	#check if it's the player position
 	if (get_player_coord() == tile_coord):
 		return false
 		
-	#check if the tile is available on ground layer
+	#avoid any player starting pos
+	if (spawn_pos.has(tile_coord)):
+		return false
+		
+	#check if the tile is available
 	if (!is_init && (tile_map.get_cell_source_id(ground_layer, tile_coord) != INVALID_CELL)):
 		return false
 		
@@ -113,22 +85,33 @@ func find_valid_power_up_loc(is_init : bool):
 	
 	return pos
 	
-func sprinkle_power_up(is_init : bool):
-	if (is_init):
-		var levelSetting = find_child("LevelSetting")
-		if (levelSetting):
-			for item in levelSetting.power_up_distributions:
-				for x in levelSetting.power_up_distributions[item]:
-					power_up_pos[find_valid_power_up_loc(true)] = item
-	else:
-		var inventory = find_child("Inventory")
-		if (inventory):
-			print_debug(inventory.power_ups)
-			#sprinkle power up from player inventory
+func init_power_up():
+	var levelSetting = find_child("LevelSetting")
+	if (levelSetting):
+		for item in levelSetting.power_up_distributions:
+			for x in levelSetting.power_up_distributions[item]:
+				power_up_pos[find_valid_power_up_loc(true)] = item
+					
+func sprinkle_power_up(power_ups: Dictionary):
+	for item in power_ups:
+		for x in power_ups[item]:
+			var pu = find_power_up_resources_by_name(item)
+			pu.position = tile_map.map_to_local(find_valid_power_up_loc(false))
+			add_child(pu)
+	
+func find_power_up_resources_by_name(power_up_name: String):
+	var levelSetting = find_child("LevelSetting")
+	if (levelSetting):
+		for item in levelSetting.power_up_distributions:
+			var item_instance = item.instantiate()
+			if item_instance.display_name == power_up_name:
+				return item_instance
 	
 func spawn_player(tile_coord: Vector2):
 	var player_instance = player.instantiate()
 	player_instance.position = tile_map.map_to_local(tile_coord)
+	player_instance.starting_pos = tile_map.map_to_local(tile_coord)
+	player_instance.connect("dead", _on_player_dead)
 	add_child(player_instance)
 
 func spawn_bomb(bomb_instance: Node, pos: Vector2):
@@ -141,5 +124,6 @@ func _on_bomb_destroy(pos: Vector2):
 	var tile_coord = tile_map.local_to_map(pos)
 	remove_destructable(tile_coord)
 
-func _on_player_dead():
-	reset_game()
+func _on_player_dead(power_ups: Dictionary):
+	sprinkle_power_up(power_ups)
+	#reset_game()
