@@ -6,9 +6,11 @@ signal dead(power_ups : Dictionary)
 @export var initial_speed: int = 100
 @export var bomb_count: int = 1
 @export var life_count: int = 3
-@onready var is_alive: bool = true
 
-@onready var animation: AnimationPlayer = $AnimationPlayer
+var is_alive: bool = true
+
+@onready var animation = $AnimationPlayer
+@onready var inventory = $Inventory
 
 #power up effect
 var additional_speed : int = 0
@@ -59,28 +61,26 @@ func spawn_bomb():
 	bomb_instance.reach += additional_bomb_reach
 	world.spawn_bomb(bomb_instance, self.position)
 	#get_parent().add_child(bomb_instance)
+
+func die():
+	emit_signal("dead", inventory.power_ups)
+	inventory.remove_all_item()
+	is_alive = false
 	
 func on_bomb_exploding():
 	bomb_count += 1
 
 func _on_hurt_box_area_entered(area: Area2D):
-	if area.is_in_group("hazard"):
-		is_alive = false
+	var powerup = area.get_parent() as PowerUp
+	if (powerup):
+		inventory.add_item(powerup.display_name)
 		
-	else:
-		var powerup = area.get_parent() as PowerUp
-		if (powerup):
-			var inventory = find_child("Inventory")
-	
-			if (inventory):
-				inventory.add_item(powerup.display_name)
-				
-				#apply power up effect
-				additional_speed += powerup.additional_player_speed
-				bomb_count += powerup.additional_bomb_count
-				additional_bomb_reach += powerup.additional_bomb_reach
-				
-				powerup.destroy()
+		#apply power up effect
+		additional_speed += powerup.additional_player_speed
+		bomb_count += powerup.additional_bomb_count
+		additional_bomb_reach += powerup.additional_bomb_reach
+		
+		powerup.destroy()
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "dead":
@@ -97,7 +97,4 @@ func reset_player_state():
 	bomb_count = 1
 	position = starting_pos
 	
-	var inventory = find_child("Inventory")
-	if (inventory):
-		emit_signal("dead", inventory.power_ups)
-		inventory.remove_all_item()
+	die()

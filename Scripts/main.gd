@@ -124,6 +124,6 @@ func _on_bomb_destroy(pos: Vector2):
 	var tile_coord = tile_map.local_to_map(pos)
 	remove_destructable(tile_coord)
 
-func _on_player_dead(power_ups: Dictionary):
+func _on_player_dead(power_ups: Dictionary = {}):
 	sprinkle_power_up(power_ups)
 	#reset_game()

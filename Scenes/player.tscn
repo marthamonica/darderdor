@@ -132,6 +132,9 @@ collision_mask = 5
 script = ExtResource("1_mft8q")
 metadata/_edit_group_ = true
 
+[node name="Inventory" type="Node" parent="."]
+script = ExtResource("3_1t3rf")
+
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("2_8ny31")
 hframes = 14
@@ -152,9 +155,5 @@ collision_layer = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 shape = SubResource("RectangleShape2D_d6y1l")
 
-[node name="Inventory" type="Node" parent="HurtBox"]
-script = ExtResource("3_1t3rf")
-
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
-[connection signal="body_entered" from="HurtBox" to="." method="_on_hurt_box_body_entered"]

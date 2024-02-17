@@ -9,3 +9,8 @@ func _ready():
 
 func _on_spawn_timer_timeout():
 	queue_free()
+
+
+func _on_flame_area_area_entered(area: Area2D):
+	if (area.get_parent().is_class("CharacterBody2D")):
+		area.get_parent().die()

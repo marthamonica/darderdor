@@ -80,7 +80,7 @@ func project_blasts() -> Array[int]:
 
 func detonate():
 	$TickingTimer.stop()
-	$Area2D.remove_from_group("explosive")
+	$BombArea.remove_from_group("explosive")
 	
 	emit_signal("explode")
 	$AnimatedSprite2D.play("explode")

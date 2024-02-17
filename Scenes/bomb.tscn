@@ -99,9 +99,9 @@ collide_with_areas = true
 target_position = Vector2(0, 0)
 collide_with_areas = true
 
-[node name="Area2D" type="Area2D" parent="." groups=["explosive"]]
+[node name="BombArea" type="Area2D" parent="." groups=["explosive"]]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BombArea"]
 shape = SubResource("RectangleShape2D_hqo67")
 
 [connection signal="timeout" from="TickingTimer" to="." method="_on_ticking_timer_timeout"]
