@@ -27,8 +27,6 @@ func _input(event):
 	if event is InputEventKey:
 		if event.keycode == KEY_SPACE && event.pressed:
 			if (bomb_count > 0): spawn_bomb()
-		if event.keycode == KEY_D && event.pressed: # temporary to test out sprinkling power up when dead
-			reset_player_state()
 
 func updateAnimation():
 	if velocity.length() == 0 && animation.is_playing():
