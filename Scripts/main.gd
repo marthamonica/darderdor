@@ -10,11 +10,14 @@ var tile_source_id : int = 0
 
 #grid
 var grid_x : int = 17
-var grid_y : int = 11
+var grid_y : int = 12
 
 #spawn point
-const spawn_pos = [Vector2i(1,1), Vector2i(1,11), Vector2i(17,1), Vector2i(17,11)]
+const spawn_pos = [Vector2i(1,2), Vector2i(1,12), Vector2i(17,2), Vector2i(17,12)]
 var power_up_pos : Dictionary = {}
+
+#player
+var players : Array
 
 var is_destructible_custom_data = "is_destructible"
 const player = preload("res://Scenes/player.tscn")
@@ -27,11 +30,23 @@ func _ready():
 	if (!levelSetting):
 		print_debug("Game can't be started. No level setting found.")
 		return
+		
+	if (levelSetting.number_of_player < 0 || levelSetting.number_of_player > 4):
+		print_debug("Game can't be started. Game only allowed 1-4 players.")
+		return
 	
 	for idx in levelSetting.number_of_player:
 		spawn_player(spawn_pos[idx])
 		
 	init_power_up()
+	
+func _process(delta):
+	var i : int = 1
+	for player in players:
+		var life_count : int = player.life_count if is_instance_valid(player) else 0
+		var labelId : String = "P" + str(i)
+		get_node(labelId).text = labelId + ":" + str(life_count)
+		i += 1
 
 func remove_destructable(tile_coord : Vector2i):
 	#remove all destructible on ground layer
@@ -48,17 +63,27 @@ func remove_destructable(tile_coord : Vector2i):
 				add_child(pu)
 				
 				power_up_pos.erase(tile_coord)
-		
-func get_player_coord():
-	return tile_map.local_to_map($Player.get_position())
 
-#func reset_game():
-	#get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+func check_reset_game():
+	var levelSetting = find_child("LevelSetting")
+	if (levelSetting.number_of_player == 1):
+		if (!is_instance_valid(players[0]) || !players[0].is_alive):
+			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+	else:
+		#check if at least one player still alive
+		var players_alive : int = 0
+		for player in players:
+			if (is_instance_valid(player) && player.is_alive):
+				players_alive += 1
+		
+		if (players_alive <= 1):
+			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
 
 func is_valid_position_for_power_up(tile_coord : Vector2i, is_init : bool):
 	#check if it's the player position
-	if (get_player_coord() == tile_coord):
-		return false
+	for player in players:
+		if ((player.is_alive) && (tile_map.local_to_map(player.get_position()) == tile_coord)):
+			return false
 		
 	#avoid any player starting pos
 	if (spawn_pos.has(tile_coord)):
@@ -113,6 +138,7 @@ func spawn_player(tile_coord: Vector2):
 	player_instance.starting_pos = tile_map.map_to_local(tile_coord)
 	player_instance.connect("dead", _on_player_dead)
 	add_child(player_instance)
+	players.append(player_instance)
 
 func spawn_bomb(bomb_instance: Node, pos: Vector2):
 	var tile_coord = tile_map.local_to_map(pos)
@@ -126,4 +152,4 @@ func _on_bomb_destroy(pos: Vector2):
 
 func _on_player_dead(power_ups: Dictionary = {}):
 	sprinkle_power_up(power_ups)
-	#reset_game()
+	check_reset_game()

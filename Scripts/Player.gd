@@ -7,7 +7,7 @@ signal dead(power_ups : Dictionary)
 @export var bomb_count: int = 1
 @export var life_count: int = 3
 
-var is_alive: bool = true
+@export var is_alive: bool = true
 
 @onready var animation = $AnimationPlayer
 @onready var inventory = $Inventory
@@ -63,9 +63,8 @@ func spawn_bomb():
 	#get_parent().add_child(bomb_instance)
 
 func die():
+	reset_player_state()
 	emit_signal("dead", inventory.power_ups)
-	inventory.remove_all_item()
-	is_alive = false
 	
 func on_bomb_exploding():
 	bomb_count += 1
@@ -84,17 +83,16 @@ func _on_hurt_box_area_entered(area: Area2D):
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "dead":
-		#emit_signal("dead")
-		queue_free()
+		die()
 		
 func reset_player_state():
-	life_count -= 1
-	if (life_count == 0):
-		queue_free()
-		
+	life_count -= 1		
 	additional_speed = 0
 	additional_bomb_reach = 0
 	bomb_count = 1
 	position = starting_pos
+	inventory.remove_all_item()
 	
-	die()
+	if (life_count == 0):
+		is_alive = false
+		queue_free()	
