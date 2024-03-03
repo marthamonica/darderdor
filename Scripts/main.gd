@@ -68,7 +68,7 @@ func check_reset_game():
 	var gameSetting = get_node("/root/GameSetting")
 	if (gameSetting.number_of_player == 1):
 		if (!is_instance_valid(players[0]) || !players[0].is_alive):
-			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+			get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
 	else:
 		#check if at least one player still alive
 		var players_alive : int = 0
@@ -77,7 +77,7 @@ func check_reset_game():
 				players_alive += 1
 		
 		if (players_alive <= 1):
-			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
+			get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
 
 func is_valid_position_for_power_up(tile_coord : Vector2i, is_init : bool):
 	#check if it's the player position
