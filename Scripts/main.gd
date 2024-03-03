@@ -26,16 +26,16 @@ const player = preload("res://Scenes/player.tscn")
 func _ready():
 	randomize()
 	
-	var levelSetting = find_child("LevelSetting")
-	if (!levelSetting):
-		print_debug("Game can't be started. No level setting found.")
+	var gameSetting = get_node("/root/GameSetting")
+	if (!gameSetting):
+		print_debug("Game can't be started. No game setting found.")
 		return
 		
-	if (levelSetting.number_of_player < 0 || levelSetting.number_of_player > 4):
+	if (gameSetting.number_of_player < 0 || gameSetting.number_of_player > 4):
 		print_debug("Game can't be started. Game only allowed 1-4 players.")
 		return
 	
-	for idx in levelSetting.number_of_player:
+	for idx in gameSetting.number_of_player:
 		spawn_player(spawn_pos[idx])
 		
 	init_power_up()
@@ -65,8 +65,8 @@ func remove_destructable(tile_coord : Vector2i):
 				power_up_pos.erase(tile_coord)
 
 func check_reset_game():
-	var levelSetting = find_child("LevelSetting")
-	if (levelSetting.number_of_player == 1):
+	var gameSetting = get_node("/root/GameSetting")
+	if (gameSetting.number_of_player == 1):
 		if (!is_instance_valid(players[0]) || !players[0].is_alive):
 			get_tree().change_scene_to_file("res://Scenes/menu.tscn")
 	else:
@@ -111,10 +111,10 @@ func find_valid_power_up_loc(is_init : bool):
 	return pos
 	
 func init_power_up():
-	var levelSetting = find_child("LevelSetting")
-	if (levelSetting):
-		for item in levelSetting.power_up_distributions:
-			for x in levelSetting.power_up_distributions[item]:
+	var gameSetting = get_node("/root/GameSetting")
+	if (gameSetting):
+		for item in gameSetting.power_up_distributions:
+			for x in gameSetting.power_up_distributions[item]:
 				power_up_pos[find_valid_power_up_loc(true)] = item
 					
 func sprinkle_power_up(power_ups: Dictionary):
@@ -125,9 +125,9 @@ func sprinkle_power_up(power_ups: Dictionary):
 			add_child(pu)
 	
 func find_power_up_resources_by_name(power_up_name: String):
-	var levelSetting = find_child("LevelSetting")
-	if (levelSetting):
-		for item in levelSetting.power_up_distributions:
+	var gameSetting = get_node("/root/GameSetting")
+	if (gameSetting):
+		for item in gameSetting.power_up_distributions:
 			var item_instance = item.instantiate()
 			if item_instance.display_name == power_up_name:
 				return item_instance
