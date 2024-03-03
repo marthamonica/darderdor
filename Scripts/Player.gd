@@ -62,7 +62,6 @@ func spawn_bomb():
 
 func die():
 	reset_player_state()
-	emit_signal("dead", inventory.power_ups)
 	
 func on_bomb_exploding():
 	bomb_count += 1
@@ -83,14 +82,16 @@ func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "dead":
 		die()
 		
-func reset_player_state():
-	life_count -= 1		
+func reset_player_state():	
+	life_count -= 1
+	if (life_count == 0):
+		is_alive = false
+		queue_free()
+		
+	emit_signal("dead", inventory.power_ups)
+		
 	additional_speed = 0
 	additional_bomb_reach = 0
 	bomb_count = 1
 	position = starting_pos
-	inventory.remove_all_item()
-	
-	if (life_count == 0):
-		is_alive = false
-		queue_free()	
+	inventory.remove_all_item()	
