@@ -21,15 +21,12 @@ const power_up = preload("res://Scripts/PowerUp.gd")
 var bomb = preload("res://Scenes/bomb.tscn")
 
 func handleInput():
-	
 	var direction = Input.get_vector("move_left_" + str(player_idx), "move_right_"+ str(player_idx), "move_up_" + str(player_idx), "move_down_"+ str(player_idx))
 	velocity = direction * (initial_speed + additional_speed)
-		
-func _input(event):
-	if event is InputEventKey:
-		if event.keycode == KEY_SPACE && event.pressed:
-			if (bomb_count > 0): spawn_bomb()
 
+	if Input.is_action_pressed("spawn_bomb_" + str(player_idx)) && (bomb_count > 0):
+		spawn_bomb()
+		
 func updateAnimation():
 	if velocity.length() == 0 && animation.is_playing():
 		animation.stop()
