@@ -36,7 +36,7 @@ func _ready():
 		return
 	
 	for idx in gameSetting.number_of_player:
-		spawn_player(spawn_pos[idx])
+		spawn_player(idx)
 		
 	init_power_up()
 	
@@ -132,8 +132,10 @@ func find_power_up_resources_by_name(power_up_name: String):
 			if item_instance.display_name == power_up_name:
 				return item_instance
 	
-func spawn_player(tile_coord: Vector2):
+func spawn_player(player_idx: int):
 	var player_instance = player.instantiate()
+	var tile_coord = spawn_pos[player_idx]
+	player_instance.player_idx = player_idx
 	player_instance.position = tile_map.map_to_local(tile_coord)
 	player_instance.starting_pos = tile_map.map_to_local(tile_coord)
 	player_instance.connect("dead", _on_player_dead)

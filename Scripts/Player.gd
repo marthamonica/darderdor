@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 signal dead(power_ups : Dictionary)
 
+@export var player_idx : int = 0
 @export var starting_pos : Vector2i
 @export var initial_speed: int = 100
 @export var bomb_count: int = 1
@@ -20,7 +21,8 @@ const power_up = preload("res://Scripts/PowerUp.gd")
 var bomb = preload("res://Scenes/bomb.tscn")
 
 func handleInput():
-	var direction = Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
+	
+	var direction = Input.get_vector("move_left_" + str(player_idx), "move_right_"+ str(player_idx), "move_up_" + str(player_idx), "move_down_"+ str(player_idx))
 	velocity = direction * (initial_speed + additional_speed)
 		
 func _input(event):
