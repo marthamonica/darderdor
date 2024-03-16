@@ -118,7 +118,7 @@ autostart = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_f2w24")
-animation = &"strand"
+animation = &"core"
 
 [node name="FlameArea" type="Area2D" parent="." groups=["hazard"]]
 collision_layer = 2

@@ -19,6 +19,11 @@ func _ready():
 	blast_left.target_position = reach * 16 * Vector2.LEFT
 	blast_right.target_position = reach * 16 * Vector2.RIGHT
 
+func start_blaze():
+	var flame_instance = flame.instantiate()
+	flame_instance.position = position
+	get_parent().add_child(flame_instance)
+
 func extend_blaze(n: int, direction: Vector2):
 	assert( n >= 0, "ERROR: Bomb reach cannot be negative value" )
 	if (n > 0):
@@ -81,10 +86,11 @@ func project_blasts() -> Array[int]:
 func detonate():
 	$TickingTimer.stop()
 	$BombArea.remove_from_group("explosive")
+	$AnimatedSprite2D.queue_free()
 	
 	emit_signal("explode")
-	$AnimatedSprite2D.play("explode")
 	var blast_reaches = project_blasts()
+	start_blaze()
 	extend_blaze(blast_reaches[0], Vector2.UP)
 	extend_blaze(blast_reaches[1], Vector2.RIGHT)
 	extend_blaze(blast_reaches[2], Vector2.DOWN)
@@ -93,7 +99,3 @@ func detonate():
 	
 func _on_ticking_timer_timeout():
 	detonate()
-
-func _on_animated_sprite_2d_animation_finished():
-	if $AnimatedSprite2D.animation == "explode":
-		queue_free()

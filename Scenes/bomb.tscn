@@ -105,4 +105,3 @@ collide_with_areas = true
 shape = SubResource("RectangleShape2D_hqo67")
 
 [connection signal="timeout" from="TickingTimer" to="." method="_on_ticking_timer_timeout"]
-[connection signal="animation_finished" from="AnimatedSprite2D" to="." method="_on_animated_sprite_2d_animation_finished"]
