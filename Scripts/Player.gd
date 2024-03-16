@@ -40,6 +40,9 @@ func updateAnimation():
 
 func handleDead():
 	animation.play("dead")
+	
+func _ready():
+	startArmorTimer()
 
 func _physics_process(delta):
 	if is_alive:
@@ -93,4 +96,14 @@ func reset_player_state():
 	additional_bomb_reach = 0
 	bomb_count = 1
 	position = starting_pos
-	inventory.remove_all_item()	
+	inventory.remove_all_item()
+	startArmorTimer()
+
+func startArmorTimer():
+	$ArmorTimer.start()
+	$Sprite2D.blink(true)
+	remove_from_group("mortal")
+
+func _on_armor_timer_timeout():
+	$Sprite2D.blink(false)
+	add_to_group("mortal")

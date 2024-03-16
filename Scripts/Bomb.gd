@@ -6,18 +6,14 @@ signal destroy(pos: Vector2)
 enum Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
 
 @export var reach: int = 1
-@onready var blast_up = $BlastCast_up
-@onready var blast_down = $BlastCast_down
-@onready var blast_right = $BlastCast_right
-@onready var blast_left = $BlastCast_left
 
 var flame = preload("res://Scenes/flame.tscn")
 
 func _ready():
-	blast_up.target_position = reach * 16 * Vector2.UP
-	blast_down.target_position = reach * 16 * Vector2.DOWN
-	blast_left.target_position = reach * 16 * Vector2.LEFT
-	blast_right.target_position = reach * 16 * Vector2.RIGHT
+	$BlastCast_up.target_position = reach * 16 * Vector2.UP
+	$BlastCast_down.target_position = reach * 16 * Vector2.DOWN
+	$BlastCast_left.target_position = reach * 16 * Vector2.LEFT
+	$BlastCast_right.target_position = reach * 16 * Vector2.RIGHT
 
 func start_blaze():
 	var flame_instance = flame.instantiate()
@@ -41,45 +37,45 @@ func project_blasts() -> Array[int]:
 	var left = reach
 	const collision_threshold = 1 # prevent wrong rounding to tile coordinates
 
-	if (blast_up.is_colliding()):
-		var y_collision = abs(blast_up.get_collision_point().y - position.y)
+	if ($BlastCast_up.is_colliding()):
+		var y_collision = abs($BlastCast_up.get_collision_point().y - position.y)
 		up = floor(y_collision / 16)
 			
-		var collider = blast_up.get_collider()
+		var collider = $BlastCast_up.get_collider()
 		if collider.is_in_group("explosive"):
 			collider.get_parent().detonate()
 		else:	
-			emit_signal("destroy", blast_up.get_collision_point() + collision_threshold * Vector2.UP)
+			emit_signal("destroy", $BlastCast_up.get_collision_point() + collision_threshold * Vector2.UP)
 	
-	if (blast_down.is_colliding()):
-		var y_collision = abs(blast_down.get_collision_point().y - position.y)
+	if ($BlastCast_down.is_colliding()):
+		var y_collision = abs($BlastCast_down.get_collision_point().y - position.y)
 		down = floor(y_collision / 16)
 			
-		var collider = blast_down.get_collider()
+		var collider = $BlastCast_down.get_collider()
 		if collider.is_in_group("explosive"):
 			collider.get_parent().detonate()
 		else:	
-			emit_signal("destroy", blast_down.get_collision_point() + collision_threshold * Vector2.DOWN)
+			emit_signal("destroy", $BlastCast_down.get_collision_point() + collision_threshold * Vector2.DOWN)
 	
-	if (blast_left.is_colliding()):
-		var x_collision = abs(blast_left.get_collision_point().x - position.x)
+	if ($BlastCast_left.is_colliding()):
+		var x_collision = abs($BlastCast_left.get_collision_point().x - position.x)
 		left = floor(x_collision / 16)
 			
-		var collider = blast_left.get_collider()
+		var collider = $BlastCast_left.get_collider()
 		if collider.is_in_group("explosive"):
 			collider.get_parent().detonate()
 		else:	
-			emit_signal("destroy", blast_left.get_collision_point() + collision_threshold * Vector2.LEFT)
+			emit_signal("destroy", $BlastCast_left.get_collision_point() + collision_threshold * Vector2.LEFT)
 	
-	if (blast_right.is_colliding()):
-		var x_collision = abs(blast_right.get_collision_point().x - position.x)
+	if ($BlastCast_right.is_colliding()):
+		var x_collision = abs($BlastCast_right.get_collision_point().x - position.x)
 		right = floor(x_collision / 16)
 		
-		var collider = blast_right.get_collider()
+		var collider = $BlastCast_right.get_collider()
 		if collider.is_in_group("explosive"):
 			collider.get_parent().detonate()
 		else:	
-			emit_signal("destroy", blast_right.get_collision_point() + collision_threshold * Vector2.RIGHT)
+			emit_signal("destroy", $BlastCast_right.get_collision_point() + collision_threshold * Vector2.RIGHT)
 	
 	return [up, right, down, left]
 

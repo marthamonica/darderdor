@@ -12,5 +12,5 @@ func _on_spawn_timer_timeout():
 
 
 func _on_flame_area_area_entered(area: Area2D):
-	if (area.get_parent().is_class("CharacterBody2D")):
+	if (area.get_parent().is_in_group("mortal")):
 		area.get_parent().die()

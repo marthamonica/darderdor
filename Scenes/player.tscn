@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://ck2bn1vkmlche"]
+[gd_scene load_steps=14 format=3 uid="uid://ck2bn1vkmlche"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_mft8q"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_8ny31"]
 [ext_resource type="Script" path="res://Scripts/Inventory.gd" id="3_1t3rf"]
+[ext_resource type="Script" path="res://Scripts/BlinkingSprite.gd" id="4_nuxlg"]
 
 [sub_resource type="Animation" id="Animation_aapeg"]
 length = 0.001
@@ -124,7 +125,7 @@ height = 14.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_d6y1l"]
 size = Vector2(16, 16)
 
-[node name="Player" type="CharacterBody2D"]
+[node name="Player" type="CharacterBody2D" groups=["mortal"]]
 z_index = 1
 position = Vector2(24, 24)
 collision_layer = 2
@@ -140,6 +141,7 @@ texture = ExtResource("2_8ny31")
 hframes = 14
 vframes = 24
 frame = 28
+script = ExtResource("4_nuxlg")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 libraries = {
@@ -155,5 +157,11 @@ collision_layer = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="HurtBox"]
 shape = SubResource("RectangleShape2D_d6y1l")
 
+[node name="ArmorTimer" type="Timer" parent="."]
+wait_time = 3.0
+one_shot = true
+autostart = true
+
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]
+[connection signal="timeout" from="ArmorTimer" to="." method="_on_armor_timer_timeout"]
