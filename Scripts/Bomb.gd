@@ -82,7 +82,6 @@ func project_blasts() -> Array[int]:
 func detonate():
 	$TickingTimer.stop()
 	$BombArea.remove_from_group("explosive")
-	$AnimatedSprite2D.queue_free()
 	
 	emit_signal("explode")
 	var blast_reaches = project_blasts()
@@ -91,6 +90,8 @@ func detonate():
 	extend_blaze(blast_reaches[1], Vector2.RIGHT)
 	extend_blaze(blast_reaches[2], Vector2.DOWN)
 	extend_blaze(blast_reaches[3], Vector2.LEFT)
+	
+	queue_free()
 	
 	
 func _on_ticking_timer_timeout():

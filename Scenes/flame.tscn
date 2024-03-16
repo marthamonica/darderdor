@@ -114,6 +114,7 @@ script = ExtResource("1_djqhx")
 metadata/_edit_group_ = true
 
 [node name="SpawnTimer" type="Timer" parent="."]
+one_shot = true
 autostart = true
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
