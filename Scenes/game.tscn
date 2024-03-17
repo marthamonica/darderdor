@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=3 uid="uid://cslfff7vma661"]
 
-[ext_resource type="Script" path="res://Scripts/main.gd" id="1_dos0i"]
+[ext_resource type="Script" path="res://Scripts/Game.gd" id="1_dos0i"]
 [ext_resource type="Texture2D" uid="uid://bo4rnfljx54eg" path="res://Assets/tilemap.png" id="2_ikhgt"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="3_5xqgo"]
 

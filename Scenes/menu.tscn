@@ -12,7 +12,7 @@ offset_top = 64.0
 offset_right = 304.0
 offset_bottom = 108.0
 theme_override_font_sizes/font_size = 25
-text = "Number of players"
+text = "NUMBER OF PLAYERS"
 horizontal_alignment = 1
 script = ExtResource("1_3jfk4")
 
@@ -26,6 +26,7 @@ text = "1P
 "
 
 [node name="2P_Button" type="Button" parent="."]
+layout_mode = 0
 offset_left = 96.0
 offset_top = 112.0
 offset_right = 144.0
@@ -33,6 +34,7 @@ offset_bottom = 144.0
 text = "2P"
 
 [node name="3P_Button" type="Button" parent="."]
+layout_mode = 0
 offset_left = 160.0
 offset_top = 112.0
 offset_right = 208.0
@@ -40,6 +42,7 @@ offset_bottom = 144.0
 text = "3P"
 
 [node name="4P_Button" type="Button" parent="."]
+layout_mode = 0
 offset_left = 224.0
 offset_top = 112.0
 offset_right = 272.0
