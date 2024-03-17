@@ -9,7 +9,7 @@ func _process(delta):
 	pass
 
 func _on_button_pressed(numberOfPlayer : int):
-	var gameSetting = get_node("/root/GameSetting")
-	gameSetting.number_of_player = numberOfPlayer
+	var gameState = get_node("/root/GameState")
+	gameState.number_of_player = numberOfPlayer
 	
 	get_tree().change_scene_to_file("res://Scenes/game.tscn")

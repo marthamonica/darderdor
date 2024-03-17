@@ -1,4 +1,5 @@
 extends Node
 
-@export var number_of_player : int = 4 
+class_name GameSetting
+
 @export var power_up_distributions : Dictionary = {}

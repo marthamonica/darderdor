@@ -26,16 +26,16 @@ const player = preload("res://Scenes/player.tscn")
 func _ready():
 	randomize()
 	
-	var gameSetting = get_node("/root/GameSetting")
-	if (!gameSetting):
+	var gameState = get_node("/root/GameState") 
+	if (!gameState):
 		print_debug("Game can't be started. No game setting found.")
 		return
 		
-	if (gameSetting.number_of_player < 0 || gameSetting.number_of_player > 4):
+	if (gameState.number_of_player < 0 || gameState.number_of_player > 4):
 		print_debug("Game can't be started. Game only allowed 1-4 players.")
 		return
 	
-	for idx in gameSetting.number_of_player:
+	for idx in gameState.number_of_player:
 		spawn_player(idx)
 		
 	init_power_up()
@@ -65,8 +65,8 @@ func remove_destructable(tile_coord : Vector2i):
 				power_up_pos.erase(tile_coord)
 
 func check_reset_game():
-	var gameSetting = get_node("/root/GameSetting")
-	if (gameSetting.number_of_player == 1):
+	var gameState = get_node("/root/GameState")
+	if (gameState.number_of_player == 1):
 		if (!is_instance_valid(players[0]) || !players[0].is_alive):
 			get_tree().change_scene_to_file("res://Scenes/gameover.tscn")
 	else:
@@ -111,7 +111,7 @@ func find_valid_power_up_loc(is_init : bool):
 	return pos
 	
 func init_power_up():
-	var gameSetting = get_node("/root/GameSetting")
+	var gameSetting = get_tree().root.get_node("Game/Level/GameSetting") as GameSetting
 	if (gameSetting):
 		for item in gameSetting.power_up_distributions:
 			for x in gameSetting.power_up_distributions[item]:
@@ -125,7 +125,7 @@ func sprinkle_power_up(power_ups: Dictionary):
 			add_child(pu)
 	
 func find_power_up_resources_by_name(power_up_name: String):
-	var gameSetting = get_node("/root/GameSetting")
+	var gameSetting = get_tree().root.get_node("Game/Level/GameSetting") as GameSetting
 	if (gameSetting):
 		for item in gameSetting.power_up_distributions:
 			var item_instance = item.instantiate()
