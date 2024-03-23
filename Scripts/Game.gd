@@ -93,7 +93,7 @@ func is_valid_position_for_power_up(tile_coord : Vector2i, is_init : bool):
 	if (!is_init && (tile_map.get_cell_source_id(ground_layer, tile_coord) != INVALID_CELL)):
 		return false
 		
-	if (is_init && (tile_map.get_cell_atlas_coords(ground_layer, tile_coord) != BRICK_ATLAS_COORD)):
+	if (is_init && ((tile_map.get_cell_atlas_coords(ground_layer, tile_coord) != BRICK_ATLAS_COORD) || power_up_pos.find_key(tile_coord))):
 		return false
 		
 	return true

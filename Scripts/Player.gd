@@ -24,7 +24,7 @@ func handleInput():
 	var direction = Input.get_vector("move_left_" + str(player_idx), "move_right_"+ str(player_idx), "move_up_" + str(player_idx), "move_down_"+ str(player_idx))
 	velocity = direction * (initial_speed + additional_speed)
 
-	if Input.is_action_pressed("spawn_bomb_" + str(player_idx)) && (bomb_count > 0):
+	if Input.is_action_just_pressed("spawn_bomb_" + str(player_idx)) && (bomb_count > 0):
 		spawn_bomb()
 		
 func updateAnimation():
