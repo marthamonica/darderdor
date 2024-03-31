@@ -1,9 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://ck2bn1vkmlche"]
+[gd_scene load_steps=16 format=3 uid="uid://ck2bn1vkmlche"]
 
 [ext_resource type="Script" path="res://Scripts/Player.gd" id="1_mft8q"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_8ny31"]
 [ext_resource type="Script" path="res://Scripts/Inventory.gd" id="3_1t3rf"]
 [ext_resource type="Script" path="res://Scripts/BlinkingSprite.gd" id="4_nuxlg"]
+[ext_resource type="AudioStream" uid="uid://byghuutsixyfo" path="res://Audio/Item Get.wav" id="5_but7t"]
+[ext_resource type="AudioStream" uid="uid://do38pcvjdddr1" path="res://Audio/Die.wav" id="5_r5iqs"]
 
 [sub_resource type="Animation" id="Animation_aapeg"]
 length = 0.001
@@ -161,6 +163,12 @@ shape = SubResource("RectangleShape2D_d6y1l")
 wait_time = 3.0
 one_shot = true
 autostart = true
+
+[node name="AudioDie" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_r5iqs")
+
+[node name="AudioGetItem" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_but7t")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="area_entered" from="HurtBox" to="." method="_on_hurt_box_area_entered"]

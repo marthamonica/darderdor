@@ -10,6 +10,7 @@ enum Direction { UP = 0, RIGHT = 1, DOWN = 2, LEFT = 3 }
 var flame = preload("res://Scenes/flame.tscn")
 
 func _ready():
+	$AudioPlace.play()
 	$BlastCast_up.target_position = reach * 16 * Vector2.UP
 	$BlastCast_down.target_position = reach * 16 * Vector2.DOWN
 	$BlastCast_left.target_position = reach * 16 * Vector2.LEFT

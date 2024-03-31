@@ -37,9 +37,6 @@ func updateAnimation():
 		elif velocity.y < 0: direction = "Up"
 		
 		animation.play("walk" + direction)
-
-func handleDead():
-	animation.play("dead")
 	
 func _ready():
 	startArmorTimer()
@@ -49,8 +46,6 @@ func _physics_process(delta):
 		handleInput()
 		move_and_slide()
 		updateAnimation()
-	else:
-		handleDead()
 
 func spawn_bomb():
 	bomb_count -= 1
@@ -63,7 +58,9 @@ func spawn_bomb():
 	#get_parent().add_child(bomb_instance)
 
 func die():
-	reset_player_state()
+	is_alive = false
+	$AudioDie.play()
+	animation.play("dead")
 	
 func on_bomb_exploding():
 	bomb_count += 1
@@ -71,6 +68,7 @@ func on_bomb_exploding():
 func _on_hurt_box_area_entered(area: Area2D):
 	var powerup = area.get_parent() as PowerUp
 	if (powerup):
+		$AudioGetItem.play()
 		inventory.add_item(powerup.display_name)
 		
 		#apply power up effect
@@ -82,23 +80,20 @@ func _on_hurt_box_area_entered(area: Area2D):
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "dead":
-		die()
+		emit_signal("dead", inventory.power_ups)
+		reset_player_state()
+		life_count -= 1
+		if (life_count == 0):
+			queue_free()
 		
-func reset_player_state():	
-	life_count -= 1
-	if (life_count == 0):
-		is_alive = false
-		queue_free()
-		
-	emit_signal("dead", inventory.power_ups)
-		
+func reset_player_state():
+	is_alive = true
 	additional_speed = 0
 	additional_bomb_reach = 0
 	bomb_count = 1
 	position = starting_pos
 	inventory.remove_all_item()
-	startArmorTimer()
-
+	
 func startArmorTimer():
 	$ArmorTimer.start()
 	$Sprite2D.blink(true)

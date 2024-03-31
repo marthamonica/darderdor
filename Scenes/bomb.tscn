@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://bf0kv4uym6itl"]
+[gd_scene load_steps=13 format=3 uid="uid://bf0kv4uym6itl"]
 
 [ext_resource type="Script" path="res://Scripts/Bomb.gd" id="1_ip4y1"]
 [ext_resource type="Texture2D" uid="uid://bwjhop3y0gjv4" path="res://Assets/bomberman sprites.png" id="2_2ccvr"]
+[ext_resource type="AudioStream" uid="uid://dvg5sf5k070he" path="res://Audio/Place Bomb.wav" id="3_r1lu6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x0s1n"]
 atlas = ExtResource("2_2ccvr")
@@ -103,5 +104,8 @@ collide_with_areas = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="BombArea"]
 shape = SubResource("RectangleShape2D_hqo67")
+
+[node name="AudioPlace" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_r1lu6")
 
 [connection signal="timeout" from="TickingTimer" to="." method="_on_ticking_timer_timeout"]
