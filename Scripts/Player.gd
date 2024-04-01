@@ -39,7 +39,7 @@ func updateAnimation():
 		animation.play("walk" + direction)
 	
 func _ready():
-	startArmorTimer()
+	reset_player_state()
 
 func _physics_process(delta):
 	if is_alive:
@@ -93,6 +93,7 @@ func reset_player_state():
 	bomb_count = 1
 	position = starting_pos
 	inventory.remove_all_item()
+	startArmorTimer()
 	
 func startArmorTimer():
 	$ArmorTimer.start()
