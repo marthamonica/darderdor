@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://Scripts/menu.gd" id="1_3jfk4"]
 
 [node name="menu" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 0
 

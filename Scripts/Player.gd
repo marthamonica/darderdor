@@ -49,7 +49,7 @@ func _physics_process(delta):
 
 func spawn_bomb():
 	bomb_count -= 1
-	var world = get_tree().root.get_node("Game/Level") 
+	var world = get_tree().root.get_node("GameManager/Level") 
 	var bomb_instance = bomb.instantiate()
 	#bomb_instance.position = position
 	bomb_instance.connect("explode", on_bomb_exploding)

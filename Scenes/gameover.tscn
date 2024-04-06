@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://Scripts/gameover.gd" id="1_c2rvb"]
 
 [node name="gameover" type="Control"]
+process_mode = 3
 layout_mode = 3
 anchors_preset = 0
 script = ExtResource("1_c2rvb")
